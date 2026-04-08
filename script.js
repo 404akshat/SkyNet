@@ -66,29 +66,22 @@ async function fetchSkynetData() {
       statusElement.innerText = getStatusText(aqiValue);
       statusElement.style.color = getStatusColor(aqiValue);
 
-      // Update Chart Data
       const chartData = [...data].reverse();
-      
+
       aqiChart.data.labels = chartData.map(row => {
-        // Convert Supabase UTC string to IST (India Standard Time)
         return new Date(row.created_at).toLocaleTimeString('en-IN', {
           timeZone: 'Asia/Kolkata',
           hour: '2-digit',
           minute: '2-digit',
-          second: '2-digit', // Keep seconds ONLY if updates are frequent
           hour12: true
         });
       });
 
       aqiChart.data.datasets[0].data = chartData.map(row => row.aqi);
 
-      // Force Chart.js to handle the crowded labels better
-      aqiChart.options.scales.x.ticks = {
-        maxRotation: 45, // Slants the text so they don't hit each other
-        minRotation: 45,
-        autoSkip: true,
-        maxTicksLimit: 10
-      };
+// This ensures that even if you have 2 points in 1 minute, 
+// the chart stays clean.
+      aqiChart.options.scales.x.ticks.autoSkip = true;
 
       aqiChart.update();
       
