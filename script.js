@@ -1,6 +1,6 @@
 // 1. Supabase Configuration
-const supabaseUrl = 'https://YOUR_PROJECT_ID.supabase.co'; // Replace with your URL
-const supabaseKey = 'YOUR_ANON_PUBLIC_KEY'; // Replace with your Anon Key
+const supabaseUrl = 'https://krcbtbzrtbotejoyxmzr.supabase.co'; // Replace with your URL
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyY2J0YnpydGJvdGVqb3l4bXpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjU3NjEsImV4cCI6MjA4OTk0MTc2MX0.JN9NbKqfTKnou4UErFyTvZM8lzTzKfqpYRj_l3IxTIY'; // Replace with your Anon Key
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
 // 2. Initialize Map (Centered near Ashta/Indore region)
