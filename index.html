@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart City AQI Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Smart City Air Quality Dashboard</h1>
+
+  <!-- Summary Cards -->
+  <div class="cards">
+    <div class="card">
+      <p>AQI</p>
+      <h2>--</h2>
+    </div>
+    <div class="card">
+      <p>Temperature</p>
+      <h2>--</h2>
+    </div>
+    <div class="card">
+      <p>Humidity</p>
+      <h2>--</h2>
+    </div>
+    <div class="card">
+      <p>Gas Index</p>
+      <h2>--</h2>
+    </div>
+  </div>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Chart -->
+  <div class="chart-container">
+    <canvas id="aqiChart"></canvas>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script src="script.js"></script>
+</body>
+</html>
