@@ -1,7 +1,9 @@
 // 1. Supabase Configuration
-const supabaseUrl = 'https://krcbtbzrtbotejoyxmzr.supabase.co'; // Replace with your URL
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyY2J0YnpydGJvdGVqb3l4bXpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjU3NjEsImV4cCI6MjA4OTk0MTc2MX0.JN9NbKqfTKnou4UErFyTvZM8lzTzKfqpYRj_l3IxTIY'; // Replace with your Anon Key
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+const supabaseUrl = 'https://krcbtbzrtbotejoyxmzr.supabase.co'; 
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyY2J0YnpydGJvdGVqb3l4bXpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjU3NjEsImV4cCI6MjA4OTk0MTc2MX0.JN9NbKqfTKnou4UErFyTvZM8lzTzKfqpYRj_l3IxTIY'; 
+
+// Renamed variable to skynetClient to avoid SyntaxError with global 'supabase' library
+const skynetClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // 2. Initialize Map (Centered near Ashta/Indore region)
 var map = L.map('map').setView([23.0, 76.7], 9); 
@@ -36,9 +38,9 @@ let aqiChart = new Chart(ctx, {
 // 4. Function to Fetch and Update Dashboard
 async function fetchSkynetData() {
   try {
-    // Fetch last 10 records for the chart and the latest one for the cards
-    const { data, error } = await supabase
-      .from('city_stats') // Replace with your actual table name
+    // Use the renamed skynetClient here
+    const { data, error } = await skynetClient
+      .from('city_stats') 
       .select('*')
       .order('created_at', { ascending: false })
       .limit(10);
@@ -47,13 +49,13 @@ async function fetchSkynetData() {
     if (data && data.length > 0) {
       const latest = data[0];
 
-      // Update Cards
+      // Update Cards using IDs from index.html
       document.getElementById('aqi-val').innerText = Math.round(latest.aqi);
       document.getElementById('temp-val').innerText = latest.temp + "°C";
       document.getElementById('hum-val').innerText = latest.humidity + "%";
       document.getElementById('status-val').innerText = getStatusText(latest.aqi);
 
-      // Update Chart Data (reversed to show chronological order)
+      // Update Chart Data
       const chartData = [...data].reverse();
       aqiChart.data.labels = chartData.map(row => new Date(row.created_at).toLocaleTimeString());
       aqiChart.data.datasets[0].data = chartData.map(row => row.aqi);
@@ -66,16 +68,15 @@ async function fetchSkynetData() {
   }
 }
 
-// Helper to define status based on your Arduino logic
+// Helper to define status
 function getStatusText(aqi) {
   if (aqi <= 50) return "SAFE";
   if (aqi <= 100) return "WARNING";
   return "HAZARDOUS";
 }
 
-// 5. Real-time Subscription (Optional but recommended)
-// This will update the website instantly whenever the ESP32 inserts data
-const channel = supabase
+// 5. Real-time Subscription
+const channel = skynetClient
   .channel('schema-db-changes')
   .on('postgres_changes', 
       { event: 'INSERT', schema: 'public', table: 'city_stats' }, 
@@ -86,6 +87,6 @@ const channel = supabase
   )
   .subscribe();
 
-// Initial load and periodic refresh every 1 minute as a backup
+// Initial load
 fetchSkynetData();
 setInterval(fetchSkynetData, 60000);
