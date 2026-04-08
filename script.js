@@ -68,11 +68,13 @@ async function fetchSkynetData() {
   }
 }
 
-// Helper to define status
 function getStatusText(aqi) {
-  if (aqi <= 50) return "SAFE";
-  if (aqi <= 100) return "WARNING";
-  return "HAZARDOUS";
+  if (aqi <= 50) return "GOOD";           // Green Level: Air is fresh
+  if (aqi <= 100) return "MODERATE";      // Yellow Level: Acceptable
+  if (aqi <= 150) return "UNHEALTHY (SENSITIVE)"; // Orange Level: Affects kids/elderly
+  if (aqi <= 200) return "UNHEALTHY";     // Red Level: Everyone may feel effects
+  if (aqi <= 300) return "VERY UNHEALTHY"; // Purple Level: Health alert
+  return "HAZARDOUS";                     // Maroon Level: Emergency conditions
 }
 
 // 5. Real-time Subscription
