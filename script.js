@@ -2,7 +2,7 @@
 const supabaseUrl = 'https://krcbtbzrtbotejoyxmzr.supabase.co'; 
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtyY2J0YnpydGJvdGVqb3l4bXpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzNjU3NjEsImV4cCI6MjA4OTk0MTc2MX0.JN9NbKqfTKnou4UErFyTvZM8lzTzKfqpYRj_l3IxTIY'; 
 
-// Renamed variable to skynetClient to avoid SyntaxError with global 'supabase' library
+// CHANGE: Renamed variable to 'skynetClient' to avoid the SyntaxError
 const skynetClient = supabase.createClient(supabaseUrl, supabaseKey);
 
 // 2. Initialize Map (Centered near Ashta/Indore region)
@@ -38,7 +38,7 @@ let aqiChart = new Chart(ctx, {
 // 4. Function to Fetch and Update Dashboard
 async function fetchSkynetData() {
   try {
-    // Use the renamed skynetClient here
+    // CHANGE: Use 'skynetClient' here
     const { data, error } = await skynetClient
       .from('city_stats') 
       .select('*')
@@ -49,7 +49,7 @@ async function fetchSkynetData() {
     if (data && data.length > 0) {
       const latest = data[0];
 
-      // Update Cards using IDs from index.html
+      // Update Cards
       document.getElementById('aqi-val').innerText = Math.round(latest.aqi);
       document.getElementById('temp-val').innerText = latest.temp + "°C";
       document.getElementById('hum-val').innerText = latest.humidity + "%";
@@ -76,6 +76,7 @@ function getStatusText(aqi) {
 }
 
 // 5. Real-time Subscription
+// CHANGE: Use 'skynetClient' here
 const channel = skynetClient
   .channel('schema-db-changes')
   .on('postgres_changes', 
@@ -87,6 +88,6 @@ const channel = skynetClient
   )
   .subscribe();
 
-// Initial load
+// Initial load and periodic refresh
 fetchSkynetData();
 setInterval(fetchSkynetData, 60000);
