@@ -5,8 +5,8 @@ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 // CHANGE: Renamed variable to 'skynetClient' to avoid the SyntaxError
 const skynetClient = supabase.createClient(supabaseUrl, supabaseKey);
 
-// 2. Initialize Map (Centered near Ashta/Indore region)
-var map = L.map('map').setView([23.0, 76.7], 9); 
+// VIT Bhopal Coordinates: [23.2089, 76.8488]
+var map = L.map('map').setView([23.2089, 76.8488], 15);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© OpenStreetMap contributors'
