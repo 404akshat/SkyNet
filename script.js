@@ -38,7 +38,7 @@ async function fetchSkynetData() {
   try {
     // Fetch last 10 records for the chart and the latest one for the cards
     const { data, error } = await supabase
-      .from('weather_data') // Replace with your actual table name
+      .from('city_stats') // Replace with your actual table name
       .select('*')
       .order('created_at', { ascending: false })
       .limit(10);
@@ -78,7 +78,7 @@ function getStatusText(aqi) {
 const channel = supabase
   .channel('schema-db-changes')
   .on('postgres_changes', 
-      { event: 'INSERT', schema: 'public', table: 'weather_data' }, 
+      { event: 'INSERT', schema: 'public', table: 'city_stats' }, 
       (payload) => {
         console.log('New data received!', payload.new);
         fetchSkynetData(); 
